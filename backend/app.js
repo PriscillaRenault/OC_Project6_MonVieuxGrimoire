@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const compression = require('compression');
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
@@ -15,6 +16,7 @@ mongoose
 
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(compression());
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -29,7 +31,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.json());
 app.use('/api/books', bookRoutes);
 app.use('/api/auth', userRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images')));
