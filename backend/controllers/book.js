@@ -81,7 +81,6 @@ exports.updateBook = (req, res, next) => {
 
 exports.rateBook = (req, res, next) => {
   const bookId = req.params.id;
-  const bookObject = req.file;
 
   Book.findOne({ _id: bookId })
     .then((book) => {
@@ -127,12 +126,12 @@ exports.rateBook = (req, res, next) => {
 };
 
 exports.bestRating = (req, res, next) => {
-  Book.find() // Trouver tous les livres
+  Book.find()
     .then((books) => {
       const topBooks = books
         .sort((a, b) => b.averageRating - a.averageRating)
-        .slice(0, 3); // Tri et slice
-      res.status(200).json(topBooks); // Renvoi des livres
+        .slice(0, 3);
+      res.status(200).json(topBooks);
     })
     .catch((error) => res.status(400).json({ error })); // Gestion des erreurs
 };
