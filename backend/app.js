@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const compression = require('compression');
@@ -8,11 +9,9 @@ const bookRoutes = require('./routes/book');
 const userRoutes = require('./routes/user');
 
 mongoose
-  .connect(
-    'mongodb+srv://priscillarenault72460:Pillette72,@cluster0.arzrc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
-  )
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log('Connexion à MongoDB réussie !'))
-  .catch(() => console.log('Connexion à MongoDB échouée !'));
+  .catch(() => console.log('ECHEC Connexion à BDD MongoDB ECHEC'));
 
 app.use(express.json());
 app.use(bodyParser.json());
