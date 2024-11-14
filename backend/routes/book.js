@@ -7,6 +7,7 @@ const sharp = require('../middleware/sharp-config');
 const validateBook = require('../middleware/validateBook');
 
 const bookCtrl = require('../controllers/book');
+const validateBook = require('../middleware/validateBook');
 
 router.get('/', bookCtrl.getAllBooks);
 
