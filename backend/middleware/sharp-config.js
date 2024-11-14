@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = async (req, res, next) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ message: 'Aucun fichier téléchargé.' });
+      return next();
     }
 
     const outputFilename = `${
