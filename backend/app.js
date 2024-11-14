@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const compression = require('compression');
+const compression = require('compression');
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
@@ -16,7 +16,7 @@ mongoose
 
 app.use(express.json());
 app.use(bodyParser.json());
-// app.use(compression());
+app.use(compression());
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
