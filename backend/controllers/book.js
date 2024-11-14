@@ -1,6 +1,5 @@
 const Book = require('../models/book');
 const fs = require('fs');
-const ObjectId = require('mongoose').Types.ObjectId;
 
 exports.createBook = (req, res, next) => {
   const bookObject = JSON.parse(req.body.book);
@@ -59,12 +58,14 @@ exports.updateBook = (req, res, next) => {
   const bookObject = req.file
     ? {
         ...JSON.parse(req.body.book),
-        imageUrl: `${req.protocol}}://${req.get('host')}/images/${
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${
           req.file.filename
         }`,
       }
     : { ...req.body };
-  delete bookObject._userid;
+
+  delete bookObject._userId;
+
   Book.findOne({ _id: req.params.id }).then((book) => {
     if (book.userId != req.auth.userId) {
       return res.status(401).json({ message: 'Requête non autorisée' });
@@ -74,7 +75,9 @@ exports.updateBook = (req, res, next) => {
         { ...bookObject, _id: req.params.id },
       )
         .then(() => res.status(200).json({ message: 'Livre modifié !' }))
-        .catch((error) => res.status(401).json({ error }));
+        .catch((error) => {
+          res.status(400).json({ error });
+        });
     }
   });
 };
