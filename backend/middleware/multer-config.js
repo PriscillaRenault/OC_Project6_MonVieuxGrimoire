@@ -1,6 +1,7 @@
+// image upload middleware
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
+
 const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',

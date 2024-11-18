@@ -6,6 +6,7 @@ const validateBook = [
   body('author').trim(),
 
   body('year').trim(),
+
   body('genre').trim(),
 
   (req, res, next) => {

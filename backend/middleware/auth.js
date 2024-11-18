@@ -1,20 +1,20 @@
-const jwt = require('jsonwebtoken')
+//middleware to check if the user is authenticated
+//Import jwt to decode the token
+const jwt = require('jsonwebtoken');
 module.exports = (req, res, next) => {
-  //try catch block to handle errors
   try {
-    //extract token from the request headers split to delete the bearer part and take the token
-    const token = req.headers.authorization.split(' ')[1]
+    //extract the token from the request headers
+    const token = req.headers.authorization.split(' ')[1];
     //verify  to decode the token
-    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET')
+    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     //extract the user id from the token
-    const userId = decodedToken.userId
-    //
+    const userId = decodedToken.userId;
+    //check if the user id is present
     req.auth = {
       userId: userId,
-    }
-    //tout est ok on passe à la fonction next
-    next()
+    };
+    next();
   } catch (error) {
-    res.status(401).json({ error })
+    res.status(401).json({ error });
   }
-}
+};

@@ -66,20 +66,32 @@ exports.updateBook = (req, res, next) => {
 
   delete bookObject._userId;
 
-  Book.findOne({ _id: req.params.id }).then((book) => {
-    if (book.userId != req.auth.userId) {
-      return res.status(401).json({ message: 'Requête non autorisée' });
-    } else {
-      Book.updateOne(
-        { _id: req.params.id },
-        { ...bookObject, _id: req.params.id },
-      )
-        .then(() => res.status(200).json({ message: 'Livre modifié !' }))
-        .catch((error) => {
-          res.status(400).json({ error });
-        });
-    }
-  });
+  Book.findOne({ _id: req.params.id })
+    .then((book) => {
+      if (book.userId != req.auth.userId) {
+        res.status(401).json({ message: 'Not authorized' });
+      } else {
+        // delete old image if a new one is uploaded
+        if (req.file) {
+          const oldFilename = book.imageUrl.split('/images/')[1];
+          fs.unlink(`images/${oldFilename}`, (err) => {
+            if (err) {
+              console.error("Erreur lors de la suppression de l'image:", err);
+            }
+          });
+        }
+        // update book
+        Book.updateOne(
+          { _id: req.params.id },
+          { ...bookObject, _id: req.params.id },
+        )
+          .then(() => res.status(200).json({ message: 'Livre mis à jour !' }))
+          .catch((error) => res.status(401).json({ error }));
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
 };
 
 exports.rateBook = (req, res, next) => {
@@ -136,5 +148,5 @@ exports.bestRating = (req, res, next) => {
         .slice(0, 3);
       res.status(200).json(topBooks);
     })
-    .catch((error) => res.status(400).json({ error })); // Gestion des erreurs
+    .catch((error) => res.status(400).json({ error }));
 };
